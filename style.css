@@ -1,0 +1,53 @@
+
+body {
+    background-color: #323232;
+    margin: 0;
+    color: white;
+}
+
+h1 {
+    text-align: center;
+}
+
+#content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 300px;
+}
+
+td {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table td {
+    border: 5px solid white;
+}
+
+table {
+    border: none; 
+}
+
+table tr:first-child td {
+    border-top: none; 
+}
+
+table tr:last-child td {
+    border-bottom: none; 
+}
+
+table tr td:first-child {
+    border-left: none;
+}
+
+table tr td:last-child {
+    border-right: none;
+}
