@@ -33,7 +33,7 @@ function render() {
             }
 
             tableHTML += `
-                <td onclick="makeMove(${index}, this)">
+                <td id="cell-${index}" onclick="makeMove(${index}, this)">
                     ${symbol}
                 </td>`;
         }
@@ -43,50 +43,64 @@ function render() {
     container.innerHTML = tableHTML;
 }
 
+
 function makeMove(index, cell) {
-    // Überprüfe, ob das Feld bereits belegt ist
     if (fields[index] !== null) return;
 
-    // Setze das aktuelle Symbol in das Array
     fields[index] = currentPlayer;
+    cell.innerHTML = currentPlayer === 'circle' ? generateCircleSVG() : generateCrossSVG();
+    cell.onclick = null;
 
-    // Füge das Symbol als HTML in die Zelle ein
-    if (currentPlayer === 'circle') {
-        cell.innerHTML = generateCircleSVG();
-        currentPlayer = 'cross'; // Wechsel zum nächsten Spieler
-    } else {
-        cell.innerHTML = generateCrossSVG();
-        currentPlayer = 'circle'; // Wechsel zum nächsten Spieler
+    if (checkWinner()) return; // Остановка игры при победе
+
+    currentPlayer = currentPlayer === 'circle' ? 'cross' : 'circle';
+}
+
+function checkWinner() {
+    const winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Горизонтали
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Вертикали
+        [0, 4, 8], [2, 4, 6]            // Диагонали
+    ];
+
+    for (const combo of winningCombinations) {
+        const [a, b, c] = combo;
+        if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
+            drawWinningLine(combo);
+
+            // Задержка алерта на 1 секунду (время анимации линии + небольшой запас)
+            setTimeout(() => alert(`${fields[a]} gewinnt!`), 1000);
+
+            return true;
+        }
     }
 
-    // Entferne den onclick-Handler von der Zelle
-    cell.onclick = null;
+    return false;
 }
 
-function generateCircleSVG() {
-    return `
-    <svg width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle 
-            cx="50" 
-            cy="50" 
-            r="45" 
-            stroke="#00B0EF" 
-            stroke-width="5" 
-            fill="none" 
-            stroke-dasharray="282.74" 
-            stroke-dashoffset="282.74"
-        >
-            <animate 
-                attributeName="stroke-dashoffset" 
-                from="282.74" 
-                to="0" 
-                dur="2s" 
-                fill="freeze" 
-                repeatCount="1"
-            />
-        </circle>
-    </svg>`;
+
+
+function drawWinningLine([a, b, c]) {
+    const container = document.getElementById('content');
+    const [start, end] = [document.getElementById(`cell-${a}`), document.getElementById(`cell-${c}`)];
+    const rectStart = start.getBoundingClientRect();
+    const rectEnd = end.getBoundingClientRect();
+
+    const line = document.createElement('div');
+    line.style = `
+        position: absolute;
+        height: 5px;
+        background: white;
+        transform-origin: 0 50%;
+        left: ${rectStart.left + rectStart.width / 2}px;
+        top: ${rectStart.top + rectStart.height / 2}px;
+        width: ${Math.hypot(rectEnd.left - rectStart.left, rectEnd.top - rectStart.top)}px;
+        transform: rotate(${Math.atan2(rectEnd.top - rectStart.top, rectEnd.left - rectStart.left) * 180 / Math.PI}deg);
+    `;
+    container.appendChild(line);
 }
+
+
 
 function generateCircleSVG() {
     return `
@@ -107,7 +121,6 @@ function generateCircleSVG() {
                 to="0" 
                 dur="500ms" 
                 fill="freeze" 
-                repeatCount="1"
             />
         </circle>
     </svg>`;
@@ -162,5 +175,7 @@ function generateCrossSVG() {
         </line>
     </svg>`;
 }
+
+
 
 
