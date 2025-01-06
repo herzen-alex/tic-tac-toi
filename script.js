@@ -51,26 +51,23 @@ function makeMove(index, cell) {
     cell.innerHTML = currentPlayer === 'circle' ? generateCircleSVG() : generateCrossSVG();
     cell.onclick = null;
 
-    if (checkWinner()) return; // Остановка игры при победе
+    if (checkWinner()) return;
 
     currentPlayer = currentPlayer === 'circle' ? 'cross' : 'circle';
 }
 
 function checkWinner() {
     const winningCombinations = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Горизонтали
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Вертикали
-        [0, 4, 8], [2, 4, 6]            // Диагонали
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]            
     ];
 
     for (const combo of winningCombinations) {
         const [a, b, c] = combo;
         if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
             drawWinningLine(combo);
-
-            // Задержка алерта на 1 секунду (время анимации линии + небольшой запас)
             setTimeout(() => alert(`${fields[a]} gewinnt!`), 1000);
-
             return true;
         }
     }
