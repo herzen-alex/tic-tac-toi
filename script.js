@@ -56,13 +56,13 @@ function makeMove(index, cell) {
     currentPlayer = currentPlayer === 'circle' ? 'cross' : 'circle';
 }
 
-function checkWinner() {
-    const winningCombinations = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        [0, 4, 8], [2, 4, 6]            
-    ];
+let winningCombinations = [ 
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]             
+];
 
+function checkWinner() {
     for (const combo of winningCombinations) {
         const [a, b, c] = combo;
         if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
@@ -71,9 +71,9 @@ function checkWinner() {
             return true;
         }
     }
-
     return false;
 }
+
 
 
 
@@ -97,6 +97,14 @@ function drawWinningLine([a, b, c]) {
     container.appendChild(line);
 }
 
+function restartGame() {
+    fields = [
+        null, null, null,
+        null, null, null,
+        null, null, null
+    ];   
+    render();
+}
 
 
 function generateCircleSVG() {

@@ -64,3 +64,37 @@ table tr td:last-child {
     pointer-events: none;
 }
 
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 32px;
+}
+
+.restart-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #00B0EF;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 176, 239, 0.3);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.restart-btn:hover {
+    background-color: #009acd;
+    transform: translateY(-5px);
+}
+
+.restart-btn:active {
+    transform: translateY(2px);
+}
+
+.restart-btn:focus {
+    outline: none;
+}
+
